@@ -222,7 +222,7 @@ function CurrentChat() {
 
 
         <p>
-          Aplicación en ALPHA, desarrollado por CrisKop.
+          Aplicación en ALPHA, desarrollado por CrisKop
         </p>
 
         <div className="icons">
