@@ -209,12 +209,13 @@ function CurrentChat() {
     {CurrentChatData.length === 0 && (
       <>
       <section className="presentation">
-      <div className="logo">
-        <img src="/img/moonie.png" alt="" />
-        </div>
+    
 
 
       <main>
+      <div className="logo">
+        <img src="/img/moonie.png" alt="" />
+        </div>
         <h1>
           {"Zona de inicio de Moonie"}
         </h1>
@@ -228,6 +229,12 @@ function CurrentChat() {
         <a href="https://github.com/CrisKop" target="_blank" rel="noopener noreferrer"><i className="hover ri-github-fill"></i></a>
         <a href="https://www.instagram.com/gold_cris__/" target="_blank" rel="noopener noreferrer"><i className="hover ri-instagram-line"></i></a>
         </div>
+        </main>
+
+
+        <main>
+        <p>Si te interesa unirte a la comunidad y ayudar, únete al servidor de discord</p>
+        <iframe src="https://discord.com/widget?id=1248059298131480666&theme=dark" width="350" height="300" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
         </main>
 
         <h3>
