@@ -19,6 +19,15 @@ Moonie es una aplicación de chat fullstack creada con React que permite a los u
   <img src="https://chat.criskop.com/img/screenshot.png" alt="Pantalla principal de chat" width="45%" style="margin: 1%;">
 </div>
 
+## Licencia MIT con Atribución
+
+Moonie está licenciado bajo la Licencia del Instituto Tecnológico de Massachusetts con atribución **(MIT with Attribution)**, Esto significa:
+
+* Puedes usar, modificar el software libremente
+* Distribuir el software requiere de mención o crédito al autor original u origen del código visible.
+* El código fuente debe ser libre igualmente.
+* Las versiones distribuidas o modificadas, deben mantener los mismos términos de licencia.
+
 ---
 
 Esto es un proyecto personal con ánimo de aprendizaje, siéntete libre de contribuir en lo que puedas, ¡cada aporte lo valoro!
