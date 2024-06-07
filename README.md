@@ -28,6 +28,22 @@ Moonie está licenciado bajo la Licencia del Instituto Tecnológico de Massachus
 * El código fuente debe ser libre igualmente.
 * Las versiones distribuidas o modificadas, deben mantener los mismos términos de licencia.
 
+## Contribuir ❤️
+
+¡Siempre hay manera de mejorar, si quieres ayudarnos a hacerlo a través de una idea, sugiriendo, has encontrado un error, o simplemento quieres ayudar, sigue estos pasos:
+
+  1. Haz un fork del repositorio
+  2. Crea una nueva rama con tu contribución 🌱
+  3. Envía un pull request 🌟
+
+## Contacto 👤
+
+Si tienes alguna pregunta o quieres entrar a la comunidad del equipo de desarrollo, eres bienvenido en nuestra comunidad de discord:
+
+https://discord.gg/pYcBdAuNub
+
+¡Esperamos que disfrutes Moonie tanto como disfrutamos desarrollandolo! ❤️
+
 ---
 
 Esto es un proyecto personal con ánimo de aprendizaje, siéntete libre de contribuir en lo que puedas, ¡cada aporte lo valoro!
