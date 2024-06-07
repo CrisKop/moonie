@@ -38,18 +38,22 @@ Moonie está licenciado bajo la Licencia del Instituto Tecnológico de Massachus
 
   * Dentro de la carpeta backend no existe un archivo llamado ".env", crealo, son las variables y credenciales privadas, puedes poner propias y modificar las existentes para poder iniciar el proyecto correctamente:
 
-  ```
+  ```env
+  # Configuración de la API de cloudinary (subida de imagenes/avatars)
   cloud_name=
   api_key=
   api_secret=
 
+  # Configuración de la cuenta de MongoDB
   user=
   pass=
 
+  # Configuración de CORS para desarrollo local
   backend_local_url=http://localhost:9500
   frontend_local_url=http://localhost:9501
   socket_local_url=http://localhost:9502
 
+  # Configuración de CORS para dominio de producción
   backend_url=https://chatapi.criskop.com
   frontend_url=https://chat.criskop.com
   socket_url=https://chatsocket.criskop.com
