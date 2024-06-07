@@ -35,8 +35,10 @@ import { io } from '../app.js';
       const user = req.user
       const {chatid} = req.body
 
+      console.log(req.body)
 
-      const editres = editNotificationsFunc(user.id, chatid, false)
+
+      const editres = await editNotificationsFunc(user.id, chatid, false)
 
       if(editres){
       return res.status(200).json(editres.chats);
@@ -91,6 +93,8 @@ import { io } from '../app.js';
       //  console.error("No se editó nada");
         return null;
       }
+
+    
     
       return notificationEdited;
     };

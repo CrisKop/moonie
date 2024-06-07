@@ -100,7 +100,9 @@ export const AuthProvider = ({children}) => {
             chatid: chatid
           }
       
-          const res = clearUserNotificationsRequest(jsontoPost)
+          const res = await clearUserNotificationsRequest(jsontoPost)
+
+          console.log(res.data, "notis")
 
           setUserNotifications(res.data)
 
