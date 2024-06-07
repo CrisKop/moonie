@@ -36,6 +36,25 @@ Moonie está licenciado bajo la Licencia del Instituto Tecnológico de Massachus
   2. Crea una nueva rama con tu contribución 🌱
   3. Envía un pull request 🌟
 
+  * Dentro de la carpeta backend no existe un archivo llamado ".env", crealo, son las variables y credenciales privadas, puedes poner propias y modificar las existentes para poder iniciar el proyecto correctamente:
+
+  ```
+  cloud_name=
+  api_key=
+  api_secret=
+
+  user=
+  pass=
+
+  backend_local_url=http://localhost:9500
+  frontend_local_url=http://localhost:9501
+  socket_local_url=http://localhost:9502
+
+  backend_url=https://chatapi.criskop.com
+  frontend_url=https://chat.criskop.com
+  socket_url=https://chatsocket.criskop.com
+  ```
+
 ## Contacto 👤
 
 Si tienes alguna pregunta o quieres entrar a la comunidad del equipo de desarrollo, eres bienvenido en nuestra comunidad de discord:
