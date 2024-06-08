@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext"
 import DeleteMessageDialog from './DeleteMessageDialog'
 import { useMessage } from '../context/MessageContext';
 import RetrySendingDialog from './RetrySendingDialog'
+import useDeviceType from '../hooks/useDeviceType';
 
 function CurrentChat() {
 
@@ -125,20 +126,33 @@ function CurrentChat() {
     }, [CurrentOppenedChat])
 
 
+
+    
+
     //#region CurrentChatData vh change
+
+    const deviceType = useDeviceType();
     useEffect(() => {
+
+      console.log(deviceType, "device")
 
    
       var chat = document.getElementById("chat")
 
+      const safeAreaInsetTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top')) || 0;
+      const safeAreaInsetBottom = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-bottom')) || 0;
+
+      console.log(safeAreaInsetBottom, safeAreaInsetBottom, "insets")
+
+
+
       if(CurrentChatData.length === 0){
-        chat.style.height = "100vh"
+        chat.style.height = `calc(100vh - ${safeAreaInsetTop}px - ${safeAreaInsetBottom}px)`;
       } else {
-        if(window.innerWidth < 1280) {
-         chat.style.height = "calc(100vh - 185px)"
-          //chat.style.height = "calc(100vh - 130px)"
+        if(window.innerWidth < 1280 && deviceType && deviceType === "mobile") {
+          chat.style.height = `calc(100vh - 180px - ${safeAreaInsetTop}px - ${safeAreaInsetBottom}px)`;
         } else {
-        chat.style.height = "calc(100vh - 130px)"
+          chat.style.height = `calc(100vh - 130px - ${safeAreaInsetTop}px - ${safeAreaInsetBottom}px)`;
         }
       }
 

@@ -1808,8 +1808,8 @@ nav {
 	}
 
 	.send{
-				position: absolute;
-			bottom: 55px;
+				position: fixed;
+			bottom: env(safe-area-inset-bottom, 0);
 			height: 75px;
 	}
 
@@ -1825,6 +1825,8 @@ nav {
     }
 	.chatContainer {
 		.leftbar {
+			position: fixed;
+			top: env(safe-area-inset-top, 0);
 			.chats {
 				max-width: none;
 
