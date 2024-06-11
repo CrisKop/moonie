@@ -12,14 +12,119 @@ function CurrentChat() {
 
     const {user, userNotifications, clearUserNotifications} = useAuth();
 
-    const { InfoOpen, setInfoOpen, CurrentChatData, setCurrentChatData, chatcontainerRef, LoadingCurrentChat, LeftBarShow, setLeftBarShow } = useChat()
+    const {noMoreMessages, getMessageFragment, loaderOnTopRef, loadingNewChatFragment, InfoOpen, setInfoOpen, CurrentChatData, setCurrentChatData, chatcontainerRef, LoadingCurrentChat, LeftBarShow, setLeftBarShow } = useChat()
 
-    const { MessageDropDown, setMessageDropDown, EditingMessage, setEditingMessage} = useMessage(); // recordar que inicia ["", false]
+    const { MessageDropDown, setMessageDropDown, EditingMessage, setEditingMessage, sendingMessageData} = useMessage(); // recordar que inicia ["", false]
 
+    const [page, setPage] = useState(1);
+
+    const [lastMessageBeforeFragmentID, setLastMessageBeforeFragmentID] = useState("")
+
+
+    //#region fragmentos de mensajes
+    useEffect(() => {
+      if(CurrentOppenedChat._id){
+
+        if(CurrentOppenedChat.length === 0 ) return;
+        if(CurrentOppenedChat.messages.length === 0) return;
+        const messagedata = CurrentOppenedChat.messages[0]; // Obtén el primer mensaje agregado
+        renderNewFragment(CurrentOppenedChat._id, page).then(() => {
+
+          setLastMessageBeforeFragmentID(messagedata._id)
+        })
+      }
+    }, [page])
+    
+
+    const newPage = async () => {
+      setPage(prevPage => prevPage + 1);
+    };
+
+    useEffect(() => {
+      if (chatcontainerRef.current && lastMessageBeforeFragmentID.length > 0) {
+          const element = chatcontainerRef.current.querySelector(`[message-id="${lastMessageBeforeFragmentID}"]`);
+          if (element) {
+              const margin = 100; // Margen personalizado
+              const elementRect = element.getBoundingClientRect();
+              const scrollPosition = elementRect.top - margin;
+  
+              element.scrollIntoView({ behavior: 'auto', block: 'start' });
+  
+              // Ajustar la posición de desplazamiento con el margen personalizado
+              chatcontainerRef.current.scrollBy({ top: -margin, left: 0, behavior: 'auto' });
+
+              element.classList.add('parpadeo')
+
+              setTimeout(() => {
+                element.classList.remove('parpadeo')
+              }, 1000);
+          }
+      }
+  }, [lastMessageBeforeFragmentID]);
+
+    
+
+  const renderNewFragment = async (id, pag) => {
+    
+
+    if(noMoreMessages === false) {
+     const respuesta = await getMessageFragment(id, pag)
+
+
+
+
+     console.log(respuesta, page, "currentOppenedChat new fragment")
+
+    
+    }
+    
+  }
+
+  //#region Detectar scroll (lazy loading)
+
+  useEffect(() => {
+
+    if(CurrentOppenedChat.messages){
+    var chat = document.getElementById("chat")
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+          entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                  console.log('Element is in viewport!');
+                  newPage()
+                  // Aquí puedes ejecutar cualquier acción que necesites
+              } else {
+                  console.log('Element is out of viewport!');
+              }
+          });
+      },
+      {
+          root: chat, // Set the container as the root
+          rootMargin: '0px',
+          threshold: 0.1 // Trigger when 10% is visible
+      }
+  );
+
+  if (loaderOnTopRef.current) {
+      observer.observe(loaderOnTopRef.current);
+  }
+
+  // Cleanup observer on component unmount
+  return () => {
+      if (loaderOnTopRef.current) {
+          observer.unobserve(loaderOnTopRef.current);
+      }
+  };
+
+}
+  }, [CurrentOppenedChat])
 
 
     //#region Mensaje temporal
     useEffect(() => {
+
+      if(sendingMessageData.length > 0){
       if(CurrentOppenedChat.length === 0 ) return;
       if(CurrentOppenedChat.messages.length === 0) return;
       const newMessages = CurrentOppenedChat.messages; // Obtén los nuevos mensajes del contexto
@@ -29,7 +134,7 @@ function CurrentChat() {
       if (chatcontainer) {
         const newMessage = chatcontainer.querySelector(`[message-id="${messagedata._id}"]`);
 
-      if(!messagedata._id.includes("temporal-")) {
+      if(messagedata._id && !messagedata._id.includes("temporal-")) {
         if(newMessage && newMessage.classList.contains("semitransparent")){
           newMessage.classList.remove('semitransparent')
         }
@@ -41,6 +146,7 @@ function CurrentChat() {
           newMessage.classList.add('semitransparent'); // Agrega la clase al nuevo mensaje
         }
       }
+    }
     
     }, [CurrentOppenedChat.messages]); 
 
@@ -305,7 +411,7 @@ function CurrentChat() {
   {
     //#region Inicio de chat con mensajes
   }
-<div onClick={handleInfoOpen} className={`hover ${CurrentChatData.name ? "chatstart" : "hidden"}`}>
+<div ref={loaderOnTopRef} onClick={handleInfoOpen} className={`hover ${CurrentChatData.name ? "chatstart" : "hidden"}`}>
   {CurrentChatData.length !== 0 && (
     <>
       <div className="pfp">
@@ -318,6 +424,12 @@ function CurrentChat() {
     </>
   )}
 </div>
+
+
+{CurrentOppenedChat && CurrentOppenedChat.messages && CurrentOppenedChat.messages.length > 0 && (
+<div className={`loader ${loadingNewChatFragment === false ? "hiddenelement" : ""}`}></div>
+)}
+
 
 { CurrentOppenedChat.messages &&
 CurrentOppenedChat.messages.map((m, index) => {

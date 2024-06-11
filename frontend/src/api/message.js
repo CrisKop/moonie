@@ -4,7 +4,9 @@ import axios from "./axios";
 
 export const sendMessageRequest = data => axios.post(`/messages/`, data)
 
-export const getChatMessages = (chatID, lastChatDeletion) => axios.get(`/messages/getchatmessages?chatid=${chatID}&lastchatdeletion=${lastChatDeletion}`)
+export const getChatMessagesRequest = (chatID, lastChatDeletion) => axios.get(`/messages/getchatmessages?chatid=${chatID}&lastchatdeletion=${lastChatDeletion}`)
+
+export const getMessagesFragmentRequest = (chatID, lastChatDeletion, page) => axios.get(`/messages/getmessagesfragment?chatid=${chatID}&lastchatdeletion=${lastChatDeletion}&page=${page}`)
 
 export const searchMessagesRequest = (chatID, search) => axios.get(`/messages/searchmessages?chatid=${chatID}&search=${search}`)
 

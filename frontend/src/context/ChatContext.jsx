@@ -13,7 +13,8 @@ import {
 } from '../api/chat';
 
 import {
-  getChatMessages
+  getChatMessagesRequest,
+  getMessagesFragmentRequest
 } from '../api/message'
 import { useAuth } from './AuthContext';
 import { useSocket } from './SocketContext';
@@ -188,6 +189,50 @@ export function ChatProvider({ children }) {
     }
   }
 
+  const [loadingNewChatFragment, setLoadingNewChatFragment] = useState(false)
+  const loaderOnTopRef = useRef(null)
+    
+
+
+  const [noMoreMessages, setNoMoreMessages] = useState(false)
+  //#region GET.MSG.PAGINACION
+  const getMessageFragment = async (chatID, page) => {
+    try {
+      setLoadingNewChatFragment(true)
+
+   
+
+      const ChatDeletionData = user.deletedchats.filter(c => c[0] === chatID)
+
+      const lastChatDeletion = ChatDeletionData.length > 0 ? ChatDeletionData[0][2] : null;
+
+      console.log(lastChatDeletion)
+
+      const messagesres = await getMessagesFragmentRequest(chatID, lastChatDeletion, page)
+
+      console.log(messagesres.data, page, "nuevosMensajes paginados")
+
+
+      const currentOC = CurrentOppenedChat
+
+      currentOC.messages = [...messagesres.data, ...currentOC.messages];
+
+
+      console.log(currentOC, "GetMessagesFragment function")
+
+      setCurrentOppenedChat(currentOC)
+
+      setLoadingNewChatFragment(false)
+
+      return currentOC.messages;
+
+      //setCurrentOppenedChat()
+    } catch (error) {
+      console.error(error);
+      setNoMoreMessages(true)
+    }
+  }
+
 //#region Obtener mensajes (y chat)
   const getChatAndMessages = async (chatID, chatobject) => {
     try {
@@ -209,7 +254,7 @@ export function ChatProvider({ children }) {
 
       console.log(lastChatDeletion)
 
-      const messagesres = await getChatMessages(chatID, lastChatDeletion)
+      const messagesres = await getMessagesFragmentRequest(chatID, lastChatDeletion, 1)
 
 
       const currentOC = res.data
@@ -740,7 +785,7 @@ socket.on("groupInvited", (data) => {
 
 
   return (
-    <ChatContext.Provider value={{LoadingDeleteChat, LoadingCreateChat, setLoadingCreateChat, setLoadingCurrentChat, LoadingCurrentChat, LoadingChatList, setLoadingChatList, editGroupAdministrators, AddMembersToGroupDialog,  setAddMembersToGroupDialog, LeaveGroupDialog,  setLeaveGroupDialog, editGroupMembers, groupUserDialog, setGroupUserDialog, chatcontainerRef, messageConfigOpen, setmessageConfigOpen, changeGroupInfo, GroupConfigOpen, setGroupConfigOpen, CreateGroupDialogOpen,  setCreateGroupDialogOpen, deleteChat, DeleteChatDialogOpen,  setDeleteChatDialogOpen, ChatListDropDown, setChatListDropDown, UserConfigOpen, setUserConfigOpen, newChatsList, setNewChatsList, CurrentChatData, setCurrentChatData, CurrentOppenedChat, setCurrentOppenedChat, getChatAndMessages, InfoOpen, setInfoOpen, LeftBarShow, setLeftBarShow, userChats, setUserChats, createChat, getUserChats, getNewChats, errors, setErrors, newChatDialogOpen, setnewChatDialogOpen }}>
+    <ChatContext.Provider value={{noMoreMessages, getMessageFragment, loaderOnTopRef, loadingNewChatFragment,LoadingDeleteChat, LoadingCreateChat, setLoadingCreateChat, setLoadingCurrentChat, LoadingCurrentChat, LoadingChatList, setLoadingChatList, editGroupAdministrators, AddMembersToGroupDialog,  setAddMembersToGroupDialog, LeaveGroupDialog,  setLeaveGroupDialog, editGroupMembers, groupUserDialog, setGroupUserDialog, chatcontainerRef, messageConfigOpen, setmessageConfigOpen, changeGroupInfo, GroupConfigOpen, setGroupConfigOpen, CreateGroupDialogOpen,  setCreateGroupDialogOpen, deleteChat, DeleteChatDialogOpen,  setDeleteChatDialogOpen, ChatListDropDown, setChatListDropDown, UserConfigOpen, setUserConfigOpen, newChatsList, setNewChatsList, CurrentChatData, setCurrentChatData, CurrentOppenedChat, setCurrentOppenedChat, getChatAndMessages, InfoOpen, setInfoOpen, LeftBarShow, setLeftBarShow, userChats, setUserChats, createChat, getUserChats, getNewChats, errors, setErrors, newChatDialogOpen, setnewChatDialogOpen }}>
       {children}
     </ChatContext.Provider>
   );

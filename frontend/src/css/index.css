@@ -38,6 +38,10 @@ body {
   overflow: hidden;
 }
 
+.hiddenelement {
+  display: none !important;
+}
+
 .semitransparent {
   opacity: 0.5;
 }

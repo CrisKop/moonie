@@ -89,7 +89,71 @@ export const createMessage = async(req,res) => {
     }
   }
 
+  export const getMessagesFragment = async(req,res) => {
+    const {chatid, lastchatdeletion} = req.query;
+    let {page} = req.query;
 
+    page = parseInt(page)
+    console.log(page)
+    let usersskip = page === 1 ? 0 : (page * 20) - 20;
+
+    const verifyChatDeletion = async (mongoTimestamp, deletionDate) =>{
+      const mongodate = new Date(mongoTimestamp);
+      const DelDate = parseInt(deletionDate)
+
+      return mongodate < DelDate;
+    }
+
+    if(!chatid) return res.status(500).json(["No fue enviada una id"]);
+  
+    try {
+  
+
+      const count = await Msgs.countDocuments({ chatID: chatid });
+if (count === 0) {
+  return res.status(200).json([]);
+}
+
+const lastdeletionchatDate = new Date(parseInt(lastchatdeletion));
+
+console.log(lastdeletionchatDate)
+
+let messages;
+
+if(isNaN(lastdeletionchatDate)){
+  messages = await Msgs.find({
+    chatID: chatid
+  })
+    .populate({
+      path: 'senderID',
+      select: '_id username avatarURL'
+    })   .sort({ createdAt: -1 }) // Ordena por la fecha de creación en orden descendente
+    .skip(usersskip) // Salta los datos más recientes según el número especificado
+    .limit(20) // Limita los resultados a 20
+} else {
+  messages = await Msgs.find({
+    chatID: chatid ,
+    createdAt: {$gte: lastdeletionchatDate }
+  })
+    .populate({
+      path: 'senderID',
+      select: '_id username avatarURL'
+    })   .sort({ createdAt: -1 }) // Ordena por la fecha de creación en orden descendente
+    .skip(usersskip) // Salta los datos más recientes según el número especificado
+    .limit(20) // Limita los resultados a 20
+}
+
+      if(!messages) return res.status(500).json(["Mensajes no encontrados"]);
+
+      // Ordena los mensajes obtenidos en orden ascendente antes de devolverlos
+const sortedMsgs = messages.sort((a, b) => a.createdAt - b.createdAt);
+  
+      return res.status(200).json(sortedMsgs)
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(["Error al obtener mensajes"]);
+    }
+  }
 
 
   export const getChatMessages = async(req,res) => {
